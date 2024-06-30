@@ -11,7 +11,7 @@ const bookingsSchema =new mongoose.Schema({
         type: Date
     },
     seatNumber:{
-        type: Number,
+        type: String,
         required: true
     },
     user: {

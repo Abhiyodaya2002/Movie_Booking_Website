@@ -45,7 +45,7 @@ export const signup = async (req,res, next)=>{
             {
                 return res.status(500).json({message:"unexpected error occured"});
             }
-            return res.status(201).json({user});
+            return res.status(201).json({id: user._id});
 }
 
 export const updateUser = async (req,res,next)=>{
@@ -116,14 +116,14 @@ export const login= async(req,res,next)=>{
             return res.status(400).json({message:"Incorrect Password"});
         }
 
-        return res.status(200).json({message: "login successful"});
+        return res.status(200).json({id: existingUser._id, message:"Login Successful"});
 }
 
 export const getBookingsOfUser= async (req,res,next)=>{
     const id =req.params.id;
     let bookings;
     try{
-         bookings= await Bookings.find({user: id});
+         bookings= await Bookings.find({user: id}).populate('movie').populate('user');
     }
     catch(err){
 return console.log(err);
@@ -134,3 +134,22 @@ return console.log(err);
         }
         return res.status(200).json({bookings});
 }
+
+export const getUserById= async (req,res,next)=>{
+    const id =req.params.id;
+    let user;
+    try {
+     user = await User.findById(id);
+    }
+    catch(err)
+    {
+        return next (err);
+    }
+    if(!user)
+        {
+            return res.status(500).json({message:"expected error occured"});
+        }
+    
+        return res.status(200).json({user});
+    }
+    
