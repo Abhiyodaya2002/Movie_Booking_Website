@@ -1,10 +1,11 @@
 
 import express from "express"
-
+import dotenv from "dotenv"
+dotenv.config();
 const stripRouter = express.Router();
 
 import Stripe from 'stripe';
-const stripe = Stripe('sk_test_51M3ZeNSEjgF9wMD78YrQ3qfNVFxnhPiqPyh0bEKssUL3vdK0xoUtYUI1BAkXuC6YKbTMDPRx87KcZVE19sdnFzRN00sw0er4Gw');
+const stripe = Stripe(`${process.env.SECRET_KEY_Stripe}`);
 
 stripRouter.post('/create-checkout-session', async (req, res) => {
     const { movieId } = req.body;
@@ -19,7 +20,7 @@ stripRouter.post('/create-checkout-session', async (req, res) => {
           price_data: {
             currency: 'inr',
             product_data: {
-              name: 'Movie Title',
+              name: 'Price of Movie',
             },
             unit_amount: 50000, // Amount in cents
           },
